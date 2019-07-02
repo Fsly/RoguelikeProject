@@ -84,7 +84,7 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             Vector2 pos = RandomPosition();
-            //Debug.Log(pos);
+            Debug.Log(pos);
             GameObject enemyPrefab = RandomPrefab(prefabs);
             GameObject go = Instantiate(enemyPrefab, pos, Quaternion.identity) as GameObject;
             go.transform.SetParent(mapHolder);
