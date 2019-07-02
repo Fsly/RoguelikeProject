@@ -6,6 +6,7 @@ public class Wall : MonoBehaviour
 
     public int hp = 2;
 
+    //表示用于2D游戏的精灵对象。
     public Sprite damageSprite;//受到攻击的图片
 
     //自身受到攻击的时候
