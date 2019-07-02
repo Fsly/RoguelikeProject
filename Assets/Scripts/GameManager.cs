@@ -2,13 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     private static GameManager _instance;
 
-    public static GameManager Instance {
-        get {
+    public static GameManager Instance
+    {
+        get
+        {
             return _instance;
         }
     }
@@ -17,8 +21,8 @@ public class GameManager : MonoBehaviour {
     public int food = 100;
     public AudioClip dieClip;
 
-    [HideInInspector]public List<Enemy>  enemyList = new List<Enemy>();
-    [HideInInspector]public bool isEnd = false;//是否得到终点
+    [HideInInspector] public List<Enemy> enemyList = new List<Enemy>();
+    [HideInInspector] public bool isEnd = false;//是否得到终点
     private bool sleepStep = true;
     private Text foodText;
     private Text failText;
@@ -29,14 +33,16 @@ public class GameManager : MonoBehaviour {
 
 
 
-    void Awake() {
+    void Awake()
+    {
         _instance = this;
         DontDestroyOnLoad(gameObject);
         InitGame();
     }
 
 
-    void InitGame() {
+    void InitGame()
+    {
         //初始化地图
         mapManager = GetComponent<MapManager>();
         mapManager.InitMap();
@@ -50,67 +56,83 @@ public class GameManager : MonoBehaviour {
         dayImage = GameObject.Find("DayImage").GetComponent<Image>();
         dayText = GameObject.Find("DayText").GetComponent<Text>();
         dayText.text = "Day " + level;
-        Invoke("HideBlack",1);
+        Invoke("HideBlack", 1);
 
         //初始化参数
         isEnd = false;
         enemyList.Clear();
     }
 
-    void UpdateFoodText(int foodChange) {
-        if (foodChange == 0) {
+    void UpdateFoodText(int foodChange)
+    {
+        if (foodChange == 0)
+        {
             foodText.text = "Food:" + food;
         }
-        else {
+        else
+        {
             string str = "";
-            if (foodChange < 0) {
+            if (foodChange < 0)
+            {
                 str = foodChange.ToString();
             }
-            else {
+            else
+            {
                 str = "+" + foodChange;
             }
             foodText.text = str + "   Food:" + food;
         }
     }
 
-    public void ReduceFood(int count) {
+    public void ReduceFood(int count)
+    {
         food -= count;
         UpdateFoodText(-count);
-        if (food <= 0) {
+        if (food <= 0)
+        {
             failText.enabled = true;
             AudioManager.Instance.StopBgMusic();
             AudioManager.Instance.RandomPlay(dieClip);
         }
     }
-    public void AddFood(int count) {
+    public void AddFood(int count)
+    {
         food += count;
         UpdateFoodText(count);
     }
 
-    public void OnPlayerMove() {
-        if (sleepStep==true) {
+    public void OnPlayerMove()
+    {
+        if (sleepStep == true)
+        {
             sleepStep = false;
         }
-        else {
-            foreach (var enemy in enemyList) {
+        else
+        {
+            foreach (var enemy in enemyList)
+            {
                 enemy.Move();
             }
             sleepStep = true;
         }
         //检测有没有到达终点
-        if (player.targetPos.x == mapManager.cols - 2 && player.targetPos.y == mapManager.rows - 2) {
+        if (player.targetPos.x == mapManager.cols - 2 && player.targetPos.y == mapManager.rows - 2)
+        {
             isEnd = true;
             //加载下一个关卡
-            Application.LoadLevel( Application.loadedLevel );//重新加载本关卡
+            //Application.LoadLevel( Application.loadedLevel );
+            SceneManager.LoadScene("Main");//重新加载本关卡
         }
     }
 
-    void OnLevelWasLoaded(int sceneLevel) {
+    void OnLevelWasLoaded(int sceneLevel)
+    {
         level++;
         InitGame();//初始化游戏
     }
 
-    void HideBlack() {
+    void HideBlack()
+    {
         dayImage.gameObject.SetActive(false);
     }
 }
