@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
                     case "OutWall":
                         break;
                     case "Wall":
+                        //SetTrigger:设置给定触发器参数的值
                         animator.SetTrigger("Attack");
                         AudioManager.Instance.RandomPlay(chop1Audio, chop2Audio);
                         hit.collider.SendMessage("TakeDamage");
